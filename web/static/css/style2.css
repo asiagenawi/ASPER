@@ -1,23 +1,25 @@
+/* CSS Variables */
 :root {
-    --primary: #22c55e;
-    --primary-dark: #16a34a;
-    --primary-light: #4ade80;
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
     --success: #10b981;
-    --warning: #facc15;
+    --warning: #f59e0b;
     --error: #ef4444;
-    --bg-primary: #0f2921;
-    --bg-secondary: #1f3b2f;
-    --bg-tertiary: #2f4d3f;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
     --text-primary: #f8fafc;
-    --text-secondary: #a7f3d0;
-    --text-muted: #94a3b8;
-    --border: #2f4d3f;
-    --border-light: #3e6652;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #334155;
+    --border-light: #475569;
     --shadow: rgba(0, 0, 0, 0.3);
     --radius: 12px;
     --radius-sm: 8px;
     --transition: 0.2s ease;
 }
+
 /* Reset */
 *, *::before, *::after {
     box-sizing: border-box;
