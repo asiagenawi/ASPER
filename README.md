@@ -1,9 +1,10 @@
-# APSER: AI Parameteric Sensitivity Sweep Experiment Runner
+# ASPER: AI Parametric Sensitivity Sweep Experiment Runner
+
 A multi-agent AI system that orchestrates end-to-end parametric sweep experiments: converts natural language into structured specifications, performs automated research, generates and executes code, creates visualizations, and produces comprehensive reports.
 
 ## Setup
 
-**Prerequisites**: Python 3.9+
+**Prerequisites**: Python 3.9+ (Python 3.11 recommended for deployment)
 
 1. Clone and navigate to the repository:
 ```bash
@@ -28,7 +29,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ## Workflow Logic
 
-The main workflow (`src/main.py` or `src/main.ipynb`) orchestrates an 8-step agent pipeline:
+The system orchestrates an 8-step agent pipeline:
 
 ### Step 1: Parse (`parser.txt`)
 - User describes their experiment in plain English
@@ -99,7 +100,7 @@ Writer → final report
 The easiest way to use ASPER is through the web interface:
 
 ```bash
-python run_web.py
+python main.py
 ```
 
 Then open http://localhost:5000 in your browser. The web interface provides:
@@ -115,89 +116,52 @@ Then open http://localhost:5000 in your browser. The web interface provides:
 For terminal-based usage:
 
 ```bash
-cd src
-python main.py
+python src/main.py
 ```
 
 Or use the interactive Jupyter notebook at `src/main.ipynb`.
 
-## Deploy to the Web
+## Docker Deployment
 
-### Option 1: Railway (Recommended - Easiest)
+### Quick Start with Docker Compose
 
-1. Push your code to GitHub
-2. Go to [railway.app](https://railway.app) and sign up
-3. Click "New Project" → "Deploy from GitHub repo"
-4. Select your ASPER repository
-5. Add environment variable: `OPENAI_API_KEY` = your key
-6. Railway will auto-deploy and give you a public URL
-
-### Option 2: Render
-
-1. Push your code to GitHub
-2. Go to [render.com](https://render.com) and sign up
-3. Click "New" → "Web Service"
-4. Connect your GitHub repo
-5. Render will detect `render.yaml` automatically
-6. Add environment variable: `OPENAI_API_KEY`
-7. Click "Create Web Service"
-
-### Option 3: Fly.io
+The easiest way to run ASPER with Docker:
 
 ```bash
-# Install flyctl
-curl -L https://fly.io/install.sh | sh
+# Set your API key
+export OPENAI_API_KEY=your_key_here
 
-# Login and deploy
-fly auth login
-fly launch --name your-app-name
-fly secrets set OPENAI_API_KEY=your_key_here
-fly deploy
+# Build and run
+docker-compose up --build
 ```
 
-### Option 4: Docker (Any Cloud Provider)
+Then open http://localhost:5000 in your browser.
 
-Build and run the Docker container:
+### Manual Docker Commands
 
 ```bash
 # Build the image
 docker build -t asper .
 
-# Run locally
-docker run -p 8080:8080 -e OPENAI_API_KEY=your_key asper
-
-# Push to Docker Hub or your cloud provider's registry
-docker tag asper your-registry/asper
-docker push your-registry/asper
+# Run the container
+docker run -p 5000:5000 -e OPENAI_API_KEY=your_key_here -v $(pwd)/experiments:/app/experiments asper
 ```
 
-Deploy the container to:
-- **Google Cloud Run**: `gcloud run deploy`
+### Deploy to Cloud Providers
+
+Push to any container registry and deploy:
+
+```bash
+# Tag and push to Docker Hub
+docker tag asper your-username/asper
+docker push your-username/asper
+```
+
+Deploy to:
+- **Google Cloud Run**: `gcloud run deploy --image your-username/asper`
 - **AWS App Runner**: Push to ECR, create App Runner service
 - **Azure Container Apps**: `az containerapp create`
 - **DigitalOcean App Platform**: Connect Docker Hub repo
-
-### Option 5: Traditional VPS (Ubuntu)
-
-```bash
-# On your server
-sudo apt update && sudo apt install python3.11 python3.11-venv nginx
-
-# Clone and setup
-git clone https://github.com/your-username/ASPER.git
-cd ASPER
-python3.11 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Create .env file
-echo "OPENAI_API_KEY=your_key" > .env
-
-# Run with gunicorn
-gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 4 src.web.app:app
-
-# (Optional) Set up nginx reverse proxy and systemd service for production
-```
 
 ### Environment Variables
 
@@ -205,7 +169,6 @@ gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 4 src.web.app:app
 |----------|----------|-------------|
 | `OPENAI_API_KEY` | Yes | Your OpenAI API key |
 | `SECRET_KEY` | No | Flask secret key (auto-generated if not set) |
-| `PORT` | No | Port to run on (default: 8080) |
 
 ## Implementation
 
@@ -213,30 +176,35 @@ gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 4 src.web.app:app
 
 ```
 ASPER/
+├── main.py                  # Flask web application (entry point)
+├── Dockerfile               # Docker image configuration
+├── docker-compose.yml       # Docker Compose configuration
+├── requirements.txt         # Python dependencies
+├── .env                     # OPENAI_API_KEY (create this)
+├── templates/
+│   └── index.html           # Web interface HTML
+├── static/
+│   ├── css/                 # Stylesheets
+│   └── js/                  # JavaScript
 ├── src/
 │   ├── main.py              # CLI workflow script
 │   ├── main.ipynb           # Interactive notebook version
-│   ├── web/                 # Web interface
-│   │   ├── app.py           # Flask application
-│   │   ├── templates/       # HTML templates
-│   │   └── static/          # CSS and JavaScript
-│   └── tools/
-│       ├── schema.py        # ExperimentSpec schema
+│   ├── AgentPrompts/        # Agent instruction files
+│   │   ├── parser.txt       # Step 1: Parse specification
+│   │   ├── critic.txt       # Step 2: Review specification
+│   │   ├── editor.txt       # Step 3: Edit specification
+│   │   ├── summarizer.txt   # Step 4: Summarize experiment
+│   │   ├── researcher.txt   # Step 5: Conduct research
+│   │   ├── executor.txt     # Step 6: Execute experiment
+│   │   ├── plotter.txt      # Step 7: Generate plots
+│   │   └── writer.txt       # Step 8: Write report
+│   └── tools/               # Custom agent tools
+│       ├── schema.py        # ExperimentSpec Pydantic model
 │       ├── fileWriter.py    # File writing tool
 │       ├── fileReader.py    # File reading tool
+│       ├── fileLister.py    # File listing tool
 │       └── executeCommand.py # Command execution tool
-├── AgentPrompts/
-│   ├── parser.txt           # Step 1 instructions
-│   ├── critic.txt           # Step 2 instructions
-│   ├── editor.txt           # Step 3 instructions
-│   ├── summarizer.txt       # Step 4 instructions
-│   ├── researcher.txt       # Step 5 instructions
-│   ├── executor.txt         # Step 6 instructions
-│   ├── plotter.txt          # Step 7 instructions
-│   └── writer.txt           # Step 8 instructions
-├── experiments/             # Output directory for web interface
-├── run_web.py               # Web server launcher
-└── .env                     # OPENAI_API_KEY
+└── experiments/             # Output directory for experiments
 ```
 
 

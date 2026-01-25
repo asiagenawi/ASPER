@@ -32,8 +32,13 @@ from tools.fileWriter import write_file_tool
 from tools.executeCommand import execute_command_tool
 from tools.fileReader import read_file_tool
 
-# Create Flask app
-app = Flask(__name__)
+# Create Flask app with explicit paths for production deployment
+BASE_DIR = Path(__file__).parent.resolve()
+app = Flask(
+    __name__,
+    static_folder=str(BASE_DIR / "static"),
+    template_folder=str(BASE_DIR / "templates")
+)
 
 # Production configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
