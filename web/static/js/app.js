@@ -106,47 +106,51 @@ class ASPERApp {
         });
     }
 
-    initializeExamples() {
-        const examples = {
-            physics: `I want to simulate a damped harmonic oscillator and study how damping coefficient and spring constant affect the oscillation behavior.
+initializeExamples() {
+    const examples = {
+        physics: `I want to simulate a damped harmonic oscillator to see how changing the damping and the spring stiffness affects its motion.
 
-Parameters:
-- Damping coefficient from 0.1 to 2.0 in steps of 0.1
-- Spring constant from 1.0 to 10.0 in steps of 1.0
+Parameters to explore:
+- Damping coefficient: from 0.1 to 2.0 in steps of 0.1
+- Spring constant: from 1.0 to 10.0 in steps of 1.0
 
-Measure the decay time and number of oscillations before the amplitude drops below 1% of initial.
-Use grid search. Initial displacement is 1.0 meter, initial velocity is 0.`,
+What I will measure:
+- Decay time: how long it takes for the amplitude to drop below 1% of the initial value
+- Number of oscillations: how many times the system swings before the amplitude becomes very small
 
-            ml: `I want to train a simple neural network classifier on the Iris dataset and find the best hyperparameters.
+Use a grid search over the parameter ranges to systematically explore all combinations. The goal is 
+to understand how damping and spring stiffness influence how fast the system slows down and how many oscillations it completes.`,
 
-Sweep these parameters:
-- Learning rate: 0.0001, 0.001, 0.01, 0.1
-- Hidden layer size: 8, 16, 32, 64
-- Number of epochs: 50, 100, 200
+        optimization: `I want to minimize the Rastrigin function in two dimensions and compare how different optimization 
+methods perform. The Rastrigin function has many local minima, so it’s interesting to see which methods can find the global minimum.
 
-Maximize validation accuracy and also record training loss.
-Use random search with 15 trials. Set random seed to 42 for reproducibility.`,
+Parameters to explore:
+- x (dimension 1): from -5.12 to 5.12
+- y (dimension 2): from -5.12 to 5.12
 
-            optimization: `I want to minimize the Rastrigin function in 2D using different optimization algorithms.
+Experiment Setup:
+- Use a grid search with 50 points along each dimension, creating a 50x50 grid across the x-y plane.
+- Evaluate the Rastrigin function at each grid point.
 
-Parameters:
-- Dimension 1 (x): range from -5.12 to 5.12
-- Dimension 2 (y): range from -5.12 to 5.12
+Metrics to Record:
+- Function value at the minimum – how low the function can go
+- Location of the minimum – the x and y coordinates where the minimum occurs
 
-Compare grid search with 50x50 points to find the global minimum.
-Record the function value and the location of the minimum found.`
-        };
+Goal:
+- Compare how well grid search identifies the global minimum of the Rastrigin function.
+- Analyze the accuracy and coverage of the grid search compared to the known global minimum at (0, 0).`
+    };
 
-        document.querySelectorAll('.example-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const exampleType = btn.dataset.example;
-                if (examples[exampleType]) {
-                    this.elements.experimentInput.value = examples[exampleType].trim();
-                    this.elements.experimentInput.focus();
-                }
-            });
+    document.querySelectorAll('.example-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const exampleType = btn.dataset.example;
+            if (examples[exampleType]) {
+                this.elements.experimentInput.value = examples[exampleType].trim();
+                this.elements.experimentInput.focus();
+            }
         });
-    }
+    });
+}
 
     async startExperiment() {
         const apiKey = this.elements.apiKeyInput.value.trim();

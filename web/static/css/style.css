@@ -1,18 +1,18 @@
 :root {
-    --primary: #22c55e;
-    --primary-dark: #16a34a;
-    --primary-light: #4ade80;
+    --primary: #4a7c59;
+    --primary-dark: #3b5e46;
+    --primary-light: #6ca87a;
     --success: #10b981;
     --warning: #facc15;
     --error: #ef4444;
-    --bg-primary: #0f2921;
-    --bg-secondary: #1f3b2f;
-    --bg-tertiary: #2f4d3f;
-    --text-primary: #f8fafc;
-    --text-secondary: #a7f3d0;
-    --text-muted: #94a3b8;
-    --border: #2f4d3f;
-    --border-light: #3e6652;
+    --bg-primary: #daf3dc;
+    --bg-secondary: #bce0c0;
+    --bg-tertiary: #9bcba3;
+    --text-primary: #0f2921;
+    --text-secondary: #4a7c59;
+    --text-muted: #64748b;
+    --border: #9bcba3;
+    --border-light: #bce0c0;
     --shadow: rgba(0, 0, 0, 0.3);
     --radius: 12px;
     --radius-sm: 8px;
@@ -55,28 +55,6 @@ body {
     margin-bottom: 2rem;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    color: var(--primary);
-}
-
-.logo h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
 
 .tagline {
     color: var(--text-secondary);

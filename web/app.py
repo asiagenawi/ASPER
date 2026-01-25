@@ -498,7 +498,10 @@ def list_sessions():
     })
 
 
-if __name__ == '__main__':
-    print("Starting ASPER Web Interface...")
-    print("Open http://localhost:5000 in your browser")
-    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
+import os
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Railway sets PORT 
+automatically
+    app.run(host="0.0.0.0", port=port)
+
