@@ -497,15 +497,8 @@ def list_sessions():
         for session_id, s in sessions.items()
     })
 
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
 
 
