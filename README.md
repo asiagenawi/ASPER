@@ -92,15 +92,134 @@ Plotter → plot.png
 Writer → final report
 ```
 
+## Usage
+
+### Web Interface (Recommended)
+
+The easiest way to use ASPER is through the web interface:
+
+```bash
+python run_web.py
+```
+
+Then open http://localhost:5000 in your browser. The web interface provides:
+- Visual progress tracking through all 8 steps
+- Interactive clarification input
+- Real-time activity log
+- Results display with visualizations
+- Report viewing with Markdown rendering
+- Download all experiment files as a zip
+
+### Command Line Interface
+
+For terminal-based usage:
+
+```bash
+cd src
+python main.py
+```
+
+Or use the interactive Jupyter notebook at `src/main.ipynb`.
+
+## Deploy to the Web
+
+### Option 1: Railway (Recommended - Easiest)
+
+1. Push your code to GitHub
+2. Go to [railway.app](https://railway.app) and sign up
+3. Click "New Project" → "Deploy from GitHub repo"
+4. Select your ASPER repository
+5. Add environment variable: `OPENAI_API_KEY` = your key
+6. Railway will auto-deploy and give you a public URL
+
+### Option 2: Render
+
+1. Push your code to GitHub
+2. Go to [render.com](https://render.com) and sign up
+3. Click "New" → "Web Service"
+4. Connect your GitHub repo
+5. Render will detect `render.yaml` automatically
+6. Add environment variable: `OPENAI_API_KEY`
+7. Click "Create Web Service"
+
+### Option 3: Fly.io
+
+```bash
+# Install flyctl
+curl -L https://fly.io/install.sh | sh
+
+# Login and deploy
+fly auth login
+fly launch --name your-app-name
+fly secrets set OPENAI_API_KEY=your_key_here
+fly deploy
+```
+
+### Option 4: Docker (Any Cloud Provider)
+
+Build and run the Docker container:
+
+```bash
+# Build the image
+docker build -t asper .
+
+# Run locally
+docker run -p 8080:8080 -e OPENAI_API_KEY=your_key asper
+
+# Push to Docker Hub or your cloud provider's registry
+docker tag asper your-registry/asper
+docker push your-registry/asper
+```
+
+Deploy the container to:
+- **Google Cloud Run**: `gcloud run deploy`
+- **AWS App Runner**: Push to ECR, create App Runner service
+- **Azure Container Apps**: `az containerapp create`
+- **DigitalOcean App Platform**: Connect Docker Hub repo
+
+### Option 5: Traditional VPS (Ubuntu)
+
+```bash
+# On your server
+sudo apt update && sudo apt install python3.11 python3.11-venv nginx
+
+# Clone and setup
+git clone https://github.com/your-username/ASPER.git
+cd ASPER
+python3.11 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Create .env file
+echo "OPENAI_API_KEY=your_key" > .env
+
+# Run with gunicorn
+gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 4 src.web.app:app
+
+# (Optional) Set up nginx reverse proxy and systemd service for production
+```
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `OPENAI_API_KEY` | Yes | Your OpenAI API key |
+| `SECRET_KEY` | No | Flask secret key (auto-generated if not set) |
+| `PORT` | No | Port to run on (default: 8080) |
+
 ## Implementation
 
 ### Project Structure
 
 ```
-Experiment/
+ASPER/
 ├── src/
-│   ├── main.py              # Main workflow script
+│   ├── main.py              # CLI workflow script
 │   ├── main.ipynb           # Interactive notebook version
+│   ├── web/                 # Web interface
+│   │   ├── app.py           # Flask application
+│   │   ├── templates/       # HTML templates
+│   │   └── static/          # CSS and JavaScript
 │   └── tools/
 │       ├── schema.py        # ExperimentSpec schema
 │       ├── fileWriter.py    # File writing tool
@@ -115,6 +234,8 @@ Experiment/
 │   ├── executor.txt         # Step 6 instructions
 │   ├── plotter.txt          # Step 7 instructions
 │   └── writer.txt           # Step 8 instructions
+├── experiments/             # Output directory for web interface
+├── run_web.py               # Web server launcher
 └── .env                     # OPENAI_API_KEY
 ```
 

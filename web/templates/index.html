@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASPER - AI Parametric Sweep Experiment Runner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <h1>ASPER</h1>
+            </div>
+            <p class="tagline">AI Parametric Sweep Experiment Runner</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section id="input-section" class="card">
+                <h2>Describe Your Experiment</h2>
+                <p class="hint">Explain in plain English what you want to experiment with. Include parameters, metrics, and goals.</p>
+
+                <div class="input-group api-key-group">
+                    <label for="api-key-input">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                        </svg>
+                        OpenAI API Key
+                    </label>
+                    <input type="password" id="api-key-input" placeholder="sk-..." autocomplete="off">
+                    <p class="field-hint">Your key is sent directly to OpenAI and never stored on our servers. <a href="https://platform.openai.com/api-keys" target="_blank">Get an API key</a></p>
+                </div>
+
+                <div class="input-group">
+                    <label for="experiment-input">Experiment Description</label>
+                    <textarea id="experiment-input" placeholder="Example: I want to study how learning rate and batch size affect the training accuracy of a neural network. Sweep learning rate from 0.001 to 0.1 on a log scale, and batch size from 16 to 128. Minimize the validation loss and record training time. Use random search with 20 trials."></textarea>
+                </div>
+
+                <div class="examples">
+                    <span class="examples-label">Examples:</span>
+                    <button class="example-btn" data-example="physics">Physics Simulation</button>
+                    <button class="example-btn" data-example="ml">ML Training</button>
+                    <button class="example-btn" data-example="optimization">Optimization</button>
+                </div>
+
+                <button id="start-btn" class="primary-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Start Experiment
+                </button>
+            </section>
+
+            <!-- Progress Section -->
+            <section id="progress-section" class="card hidden">
+                <h2>Experiment Progress</h2>
+
+                <div class="steps-container">
+                    <div class="step" data-step="0">
+                        <div class="step-indicator">
+                            <span class="step-number">1</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Parse Specification</h3>
+                            <p>Converting description to structured format</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="1">
+                        <div class="step-indicator">
+                            <span class="step-number">2</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Review Specification</h3>
+                            <p>Checking for ambiguities and issues</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="2">
+                        <div class="step-indicator">
+                            <span class="step-number">3</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Clarification</h3>
+                            <p>Answer questions to refine the experiment</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="3">
+                        <div class="step-indicator">
+                            <span class="step-number">4</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Update Specification</h3>
+                            <p>Incorporating your clarifications</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="4">
+                        <div class="step-indicator">
+                            <span class="step-number">5</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Summarize</h3>
+                            <p>Creating experiment summary</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="5">
+                        <div class="step-indicator">
+                            <span class="step-number">6</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Research</h3>
+                            <p>Gathering implementation details</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="6">
+                        <div class="step-indicator">
+                            <span class="step-number">7</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Execute</h3>
+                            <p>Running the experiment</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="7">
+                        <div class="step-indicator">
+                            <span class="step-number">8</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Visualize</h3>
+                            <p>Creating plots and charts</p>
+                        </div>
+                    </div>
+
+                    <div class="step" data-step="8">
+                        <div class="step-indicator">
+                            <span class="step-number">9</span>
+                            <span class="step-check">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="step-content">
+                            <h3>Report</h3>
+                            <p>Generating final report</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clarification Section -->
+            <section id="clarification-section" class="card hidden">
+                <h2>Clarification Needed</h2>
+                <div id="questions-container" class="questions-container"></div>
+                <div class="input-group">
+                    <textarea id="clarification-input" placeholder="Type your answers here..."></textarea>
+                </div>
+                <button id="submit-clarification" class="primary-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    Submit Answers
+                </button>
+            </section>
+
+            <!-- Log Section -->
+            <section id="log-section" class="card hidden">
+                <h2>Activity Log</h2>
+                <div id="log-container" class="log-container"></div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" class="card hidden">
+                <h2>Results</h2>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="summary">Summary</button>
+                    <button class="tab-btn" data-tab="spec">Specification</button>
+                    <button class="tab-btn" data-tab="plot">Visualization</button>
+                    <button class="tab-btn" data-tab="report">Report</button>
+                </div>
+
+                <div class="tab-content">
+                    <div id="summary-tab" class="tab-pane active">
+                        <div id="summary-content" class="content-box"></div>
+                    </div>
+
+                    <div id="spec-tab" class="tab-pane">
+                        <pre id="spec-content" class="code-block"></pre>
+                    </div>
+
+                    <div id="plot-tab" class="tab-pane">
+                        <div id="plot-container" class="plot-container">
+                            <p class="placeholder">Plot will appear here</p>
+                        </div>
+                    </div>
+
+                    <div id="report-tab" class="tab-pane">
+                        <div id="report-content" class="content-box markdown-content"></div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="download-btn" class="secondary-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download All Files
+                    </button>
+                    <button id="new-experiment-btn" class="secondary-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        New Experiment
+                    </button>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section id="error-section" class="card hidden">
+                <h2>Error</h2>
+                <div id="error-content" class="error-box"></div>
+                <button id="retry-btn" class="primary-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Try Again
+                </button>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>ASPER - Powered by AI</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

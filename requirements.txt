@@ -10,6 +10,10 @@ pydantic-settings
 agents
 openai-agents
 
+# Web framework
+flask>=3.0.0
+gunicorn>=21.0.0
+
 # Jupyter and notebook support
 jupyter
 nbconvert

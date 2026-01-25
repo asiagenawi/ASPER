@@ -17,3 +17,14 @@ venv/
 dist/
 build/
 *.egg-info/
+
+# Experiment outputs (keep directory structure)
+experiments/*
+!experiments/.gitkeep
+
+# Generated files
+*.log
+experiment.json
+research.txt
+report.md
+plot.png
