@@ -1,3 +1,6 @@
+flask
+gunicorn
+
 # Core dependencies
 langchain-openai
 langchain-core
