@@ -21,8 +21,8 @@ load_dotenv()
 
 # Add src directory to path for imports
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "tools"))
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent / "src" / "tools"))
 
 from langchain_openai import ChatOpenAI
 from agents import Agent, Runner, AgentOutputSchema
@@ -51,12 +51,11 @@ def after_request(response):
 sessions = {}
 
 # Directory for experiment outputs
-# Directory for experiment outputs
-OUTPUT_DIR = Path(__file__).parent.parent / "experiments"
+OUTPUT_DIR = Path(__file__).parent / "experiments"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Agent prompts directory
-PROMPTS_DIR = Path(__file__).parent.parent / "src" / "AgentPrompts"
+PROMPTS_DIR = Path(__file__).parent / "src" / "AgentPrompts"
 
 
 class ExperimentSession:
